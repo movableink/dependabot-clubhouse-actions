@@ -1,0 +1,24 @@
+{
+  "name": "dependabot-clubhouse-actions",
+  "version": "1.0.0",
+  "description": "Automatically create a Clubhouse story for every Dependabot PR",
+  "repository": "https://github.com/movableink/dependabot-clubhouse-actions",
+  "author": "Alex LaFroscia <alafroscia@movableink.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@actions/core": "^1.2.0",
+    "@actions/github": "^2.0.0",
+    "clubhouse-lib": "^0.9.0"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "devDependencies": {
+    "eslint": "^6.7.2",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "prettier": "^1.19.1"
+  }
+}

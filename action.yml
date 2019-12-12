@@ -1,0 +1,14 @@
+name: 'Dependabot Clubhouse Story'
+description: 'Create a Clubhouse story for every Dependabot PR'
+inputs:
+  project-id:
+    description: 'The ID of the project the story belongs to.'
+    required: true
+  token:
+    description: 'API Token for Clubhouse'
+    required: true
+  initial-state-id:
+    description: 'The ID of the workflow state to create a ticket in'
+runs:
+  using: 'node12'
+  main: 'index.js'
