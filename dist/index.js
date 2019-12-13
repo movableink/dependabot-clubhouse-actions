@@ -3406,7 +3406,7 @@ const github = __webpack_require__(469);
 
 const createTicket = __webpack_require__(644);
 
-const payload = JSON.stringify(github.context.payload, undefined, 2);
+const { payload } = github.context;
 
 // Ensure we are running on a `pull_request` event
 if (!payload.pull_request) {

@@ -5,7 +5,7 @@ const github = require("@actions/github");
 
 const createTicket = require("./lib/create-ticket");
 
-const payload = JSON.stringify(github.context.payload, undefined, 2);
+const { payload } = github.context;
 
 // Ensure we are running on a `pull_request` event
 if (!payload.pull_request) {
