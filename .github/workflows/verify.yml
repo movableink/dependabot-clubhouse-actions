@@ -1,0 +1,32 @@
+name: Verify
+
+on: [push]
+
+jobs:
+  lint:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12'
+    - run: yarn install
+    - name: Run ESLint
+      run: yarn eslint . -f tap
+
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12'
+    - run: yarn install
+    - name: Run Jest
+      run: yarn test
