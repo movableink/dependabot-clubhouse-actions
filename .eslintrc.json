@@ -4,5 +4,17 @@
     "eslint:recommended",
     "plugin:node/recommended",
     "plugin:prettier/recommended"
+  ],
+  "overrides": [
+    {
+      "files": ["__mocks__/**/*.js", "**/*.spec.js"],
+      "plugins": ["jest"],
+      "env": {
+        "jest/globals": true
+      },
+      "rules": {
+        "node/no-unpublished-require": "off"
+      }
+    }
   ]
 }
