@@ -1517,7 +1517,13 @@ var FetchRequestParser = /** @class */ (function () {
                 }
                 return Promise.reject(new client_error_1.default(response, json));
             })
-                .catch(function () { return Promise.reject(new client_error_1.default(response, {})); });
+            .catch(function (e) {
+              if (e.response && e.body) {
+                throw e;
+              }
+
+              return Promise.reject(new client_error_1.default(response, {}));
+            });
         };
     }
     return FetchRequestParser;
@@ -14230,24 +14236,37 @@ module.exports = async function createTicket({
 }) {
   const { name, url } = pullRequest;
 
-  const result = await core.group("Creating ClubHouse Story", () =>
-    client.createStory({
-      name,
-      description: `See details from Dependabot [here](${url}).`,
-      project_id: core.getInput("project-id", { required: true }),
-      story_type: "chore",
-      workflow_state_id: core.getInput("initial-state-id")
-    })
-  );
+  try {
+    const result = await core.group("Creating ClubHouse Story", () =>
+      client.createStory({
+        name,
+        description: `See details from Dependabot [here](${url}).`,
+        project_id: core.getInput("project-id", { required: true }),
+        story_type: "chore",
+        workflow_state_id: core.getInput("initial-state-id")
+      })
+    );
 
-  await core.group("Updating Pull Request", () =>
-    octokit.pulls.update({
-      owner: repository.owner.login,
-      repo: repository.name,
-      pull_number: pullRequest.number,
-      body: pullRequest.body + `\n\n:house: [ch${result.id}](${result.app_url})`
-    })
-  );
+    await core.group("Updating Pull Request", () =>
+      octokit.pulls.update({
+        owner: repository.owner.login,
+        repo: repository.name,
+        pull_number: pullRequest.number,
+        body:
+          pullRequest.body + `\n\n:house: [ch${result.id}](${result.app_url})`
+      })
+    );
+  } catch (e) {
+    if (e.response) {
+      core.debug(e.response);
+    }
+
+    if (e.body) {
+      core.debug(e.body);
+    }
+
+    core.error(e.message);
+  }
 };
 
 
