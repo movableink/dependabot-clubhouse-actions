@@ -1517,13 +1517,7 @@ var FetchRequestParser = /** @class */ (function () {
                 }
                 return Promise.reject(new client_error_1.default(response, json));
             })
-            .catch(function (e) {
-              if (e.response && e.body) {
-                throw e;
-              }
-
-              return Promise.reject(new client_error_1.default(response, {}));
-            });
+                .catch(function () { return Promise.reject(new client_error_1.default(response, {})); });
         };
     }
     return FetchRequestParser;
@@ -1926,13 +1920,13 @@ const { payload } = github.context;
 
 // Ensure we are running on a `pull_request` event
 if (!payload.pull_request) {
-  core.warning("Workflow run outside of a `pull_request` event");
+  core.warning('Workflow run outside of a `pull_request` event');
   return;
 }
 
-if (payload.action === "opened") {
-  if (!payload.pull_request.user.login.includes("dependabot")) {
-    core.debug("Not a dependabot PR");
+if (payload.action === 'opened') {
+  if (!payload.pull_request.user.login.includes('dependabot')) {
+    core.debug('Not a dependabot PR');
     return;
   }
 
@@ -14227,42 +14221,38 @@ const core = __webpack_require__(470);
 const github = __webpack_require__(469);
 const Clubhouse = __webpack_require__(153);
 
-const client = Clubhouse.create(core.getInput("token", { required: true }));
+const client = Clubhouse.create(core.getInput('token', { required: true }));
 const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
 
-module.exports = async function createTicket({
-  pull_request: pullRequest,
-  repository
-}) {
+module.exports = async function createTicket({ pull_request: pullRequest, repository }) {
   const { name, url } = pullRequest;
 
   try {
-    const result = await core.group("Creating ClubHouse Story", () =>
+    const result = await core.group('Creating ClubHouse Story', () =>
       client.createStory({
         name,
         description: `See details from Dependabot [here](${url}).`,
-        project_id: core.getInput("project-id", { required: true }),
-        story_type: "chore",
-        workflow_state_id: core.getInput("initial-state-id")
+        project_id: core.getInput('project-id', { required: true }),
+        story_type: 'chore',
+        workflow_state_id: core.getInput('initial-state-id')
       })
     );
 
-    await core.group("Updating Pull Request", () =>
+    await core.group('Updating Pull Request', () =>
       octokit.pulls.update({
         owner: repository.owner.login,
         repo: repository.name,
         pull_number: pullRequest.number,
-        body:
-          pullRequest.body + `\n\n:house: [ch${result.id}](${result.app_url})`
+        body: pullRequest.body + `\n\n:house: [ch${result.id}](${result.app_url})`
       })
     );
   } catch (e) {
     if (e.response) {
-      core.debug(e.response);
+      core.debug(JSON.stringify(e.response, null, 2));
     }
 
     if (e.body) {
-      core.debug(e.body);
+      core.debug(JSON.stringify(e.body, null, 2));
     }
 
     core.error(e.message);
