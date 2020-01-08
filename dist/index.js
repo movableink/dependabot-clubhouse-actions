@@ -34,7 +34,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(104);
+/******/ 		return __webpack_require__(526);
 /******/ 	};
 /******/ 	// initialize runtime
 /******/ 	runtime(__webpack_require__);
@@ -1906,32 +1906,41 @@ module.exports = {
 /***/ }),
 
 /***/ 104:
-/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
-
-"use strict";
+/***/ (function(module, __unusedexports, __webpack_require__) {
 
 
-const core = __webpack_require__(470);
-const github = __webpack_require__(469);
+/**
+ * fetch-error.js
+ *
+ * FetchError interface for operational errors
+ */
 
-const createTicket = __webpack_require__(644);
+module.exports = FetchError;
 
-const { payload } = github.context;
+/**
+ * Create FetchError instance
+ *
+ * @param   String      message      Error message for human
+ * @param   String      type         Error type for machine
+ * @param   String      systemError  For Node.js system error
+ * @return  FetchError
+ */
+function FetchError(message, type, systemError) {
 
-// Ensure we are running on a `pull_request` event
-if (!payload.pull_request) {
-  core.warning('Workflow run outside of a `pull_request` event');
-  return;
+	this.name = this.constructor.name;
+	this.message = message;
+	this.type = type;
+
+	// when err.type is `system`, err.code contains system error code
+	if (systemError) {
+		this.code = this.errno = systemError.code;
+	}
+
+	// hide custom error implementation details from end-users
+	Error.captureStackTrace(this, this.constructor);
 }
 
-if (payload.action === 'opened') {
-  if (!payload.pull_request.user.login.includes('dependabot')) {
-    core.debug('Not a dependabot PR');
-    return;
-  }
-
-  createTicket(payload);
-}
+__webpack_require__(669).inherits(FetchError, Error);
 
 
 /***/ }),
@@ -10337,46 +10346,6 @@ function authenticationBeforeRequest(state, options) {
 
 /***/ }),
 
-/***/ 475:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-
-/**
- * fetch-error.js
- *
- * FetchError interface for operational errors
- */
-
-module.exports = FetchError;
-
-/**
- * Create FetchError instance
- *
- * @param   String      message      Error message for human
- * @param   String      type         Error type for machine
- * @param   String      systemError  For Node.js system error
- * @return  FetchError
- */
-function FetchError(message, type, systemError) {
-
-	this.name = this.constructor.name;
-	this.message = message;
-	this.type = type;
-
-	// when err.type is `system`, err.code contains system error code
-	if (systemError) {
-		this.code = this.errno = systemError.code;
-	}
-
-	// hide custom error implementation details from end-users
-	Error.captureStackTrace(this, this.constructor);
-}
-
-__webpack_require__(669).inherits(FetchError, Error);
-
-
-/***/ }),
-
 /***/ 488:
 /***/ (function(module) {
 
@@ -10574,6 +10543,37 @@ module.exports = Hook
 module.exports.Hook = Hook
 module.exports.Singular = Hook.Singular
 module.exports.Collection = Hook.Collection
+
+
+/***/ }),
+
+/***/ 526:
+/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
+
+"use strict";
+
+
+const core = __webpack_require__(470);
+const github = __webpack_require__(469);
+
+const createTicket = __webpack_require__(644);
+
+const { payload } = github.context;
+
+// Ensure we are running on a `pull_request` event
+if (!payload.pull_request) {
+  core.warning('Workflow run outside of a `pull_request` event');
+  return;
+}
+
+if (payload.action === 'opened') {
+  if (!payload.pull_request.user.login.includes('dependabot')) {
+    core.debug('Not a dependabot PR');
+    return;
+  }
+
+  createTicket(payload);
+}
 
 
 /***/ }),
@@ -13550,7 +13550,7 @@ function hasFirstPage (link) {
 var convert = __webpack_require__(382).convert;
 var bodyStream = __webpack_require__(323);
 var PassThrough = __webpack_require__(413).PassThrough;
-var FetchError = __webpack_require__(475);
+var FetchError = __webpack_require__(104);
 
 module.exports = Body;
 
@@ -15620,7 +15620,7 @@ var Body = __webpack_require__(538);
 var Response = __webpack_require__(76);
 var Headers = __webpack_require__(314);
 var Request = __webpack_require__(409);
-var FetchError = __webpack_require__(475);
+var FetchError = __webpack_require__(104);
 
 // commonjs
 module.exports = Fetch;
