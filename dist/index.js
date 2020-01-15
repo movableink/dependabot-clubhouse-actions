@@ -14225,12 +14225,12 @@ const client = Clubhouse.create(core.getInput('token', { required: true }));
 const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
 
 module.exports = async function createTicket({ pull_request: pullRequest, repository }) {
-  const { name, url } = pullRequest;
+  const { title, url } = pullRequest;
 
   try {
     const result = await core.group('Creating ClubHouse Story', () =>
       client.createStory({
-        name,
+        name: title,
         description: `See details from Dependabot [here](${url}).`,
         project_id: core.getInput('project-id', { required: true }),
         story_type: 'chore',
