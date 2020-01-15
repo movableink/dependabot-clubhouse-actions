@@ -24,5 +24,7 @@ jobs:
       - uses: movableink/dependabot-clubhouse-actions
         with:
           project-id: 123456 # Project to create story in
-          token: ${{ secrets.CLUBHOUSE_API_TOKEN }} # Use whatever you configured previously
+        env:
+            CLUBHOUSE_API_TOKEN: ${{ secrets.CLUBHOUSE_API_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```

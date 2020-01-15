@@ -14221,7 +14221,7 @@ const core = __webpack_require__(470);
 const github = __webpack_require__(469);
 const Clubhouse = __webpack_require__(153);
 
-const client = Clubhouse.create(core.getInput('token', { required: true }));
+const client = Clubhouse.create(process.env.CLUBHOUSE_API_TOKEN);
 const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
 
 module.exports = async function createTicket({ pull_request: pullRequest, repository }) {
