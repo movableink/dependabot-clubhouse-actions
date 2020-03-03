@@ -4,6 +4,8 @@ import createTicket from './create-ticket';
 import SUCCESS_PAYLOAD from '../fixtures/create-ticket/success.json';
 import SCHEMA_MISMATCH_PAYLOAD from '../fixtures/create-ticket/schema-mismatch.json';
 
+jest.mock('@actions/github');
+
 beforeEach(() => {
   nock.disableNetConnect();
 });
@@ -14,10 +16,6 @@ test('it creates a ClubHouse ticket', async () => {
     .log(requestLog)
     .post('/api/v3/stories?token=undefined')
     .reply(200, SUCCESS_PAYLOAD);
-
-  nock('https://api.github.com')
-    .patch('/repos/foo/bar/pulls/123')
-    .reply(200, {});
 
   await createTicket(
     {
