@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 
-import createTicket from './create-ticket';
+import createTicket, { Status } from './create-ticket';
 
 const { payload } = github.context;
 
@@ -18,7 +18,13 @@ async function main(): Promise<void> {
       return;
     }
 
-    createTicket(payload.pull_request, payload.repository);
+    const status = await createTicket(payload.pull_request, payload.repository);
+
+    core.setOutput('created-ticket', `${status === Status.Created}`);
+
+    if (status === Status.Error) {
+      core.setFailed('Could not create ticket');
+    }
   }
 }
 

@@ -7,11 +7,23 @@ import { WebhookPayload, PayloadRepository } from '@actions/github/lib/interface
 const client = Clubhouse.create(process.env.CLUBHOUSE_API_TOKEN);
 const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
 
+const ticketRegex = /\[ch\d+\]/;
+
+export enum Status {
+  Created,
+  NotCreated,
+  Error
+}
+
 export default async function createTicket(
   pullRequest: WebhookPayload['pull_request'],
   repository: PayloadRepository
-): Promise<void> {
-  const { title, html_url } = pullRequest;
+): Promise<Status> {
+  const { title, html_url, body } = pullRequest;
+
+  if (body?.match(ticketRegex)) {
+    return Status.NotCreated;
+  }
 
   try {
     const result = await core.group('Creating ClubHouse Story', () =>
@@ -32,6 +44,8 @@ export default async function createTicket(
         body: pullRequest.body + `\n\n:house: [ch${result.id}](${result.app_url})`
       })
     );
+
+    return Status.Created;
   } catch (e) {
     if (e.response) {
       core.debug(JSON.stringify(e.response, null, 2));
@@ -42,5 +56,7 @@ export default async function createTicket(
     }
 
     core.error(e.message);
+
+    return Status.Error;
   }
 }

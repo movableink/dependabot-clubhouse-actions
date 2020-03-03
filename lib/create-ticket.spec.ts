@@ -57,3 +57,28 @@ test('it handles a ClubHouse error', async () => {
 
   expect(core.error).toBeCalledWith('Bad Request');
 });
+
+test('it does not create a ticket if one is already attached', async () => {
+  const requestLog = jest.fn();
+  nock('https://api.clubhouse.io')
+    .log(requestLog)
+    .post('/api/v3/stories?token=undefined')
+    .reply(200, SUCCESS_PAYLOAD);
+
+  await createTicket(
+    {
+      title: 'Testing',
+      html_url: 'https://github.com/foo/bar',
+      number: 123,
+      body: '[ch1234]'
+    },
+    {
+      owner: {
+        login: 'foo'
+      },
+      name: 'bar'
+    }
+  );
+
+  expect(requestLog).toBeCalledTimes(0);
+});

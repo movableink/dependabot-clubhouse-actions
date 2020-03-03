@@ -6248,30 +6248,37 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 exports.__esModule = true;
 var core = __importStar(__webpack_require__(470));
 var github = __importStar(__webpack_require__(469));
-var create_ticket_1 = __importDefault(__webpack_require__(456));
+var create_ticket_1 = __importStar(__webpack_require__(456));
 var payload = github.context.payload;
 function main() {
     return __awaiter(this, void 0, void 0, function () {
+        var status_1;
         return __generator(this, function (_a) {
-            // Ensure we are running on a `pull_request` event
-            if (!payload.pull_request) {
-                core.warning('Workflow run outside of a `pull_request` event');
-                return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    // Ensure we are running on a `pull_request` event
+                    if (!payload.pull_request) {
+                        core.warning('Workflow run outside of a `pull_request` event');
+                        return [2 /*return*/];
+                    }
+                    if (!(payload.action === 'opened')) return [3 /*break*/, 2];
+                    if (!payload.pull_request.user.login.includes('dependabot')) {
+                        core.debug('Not a dependabot PR');
+                        return [2 /*return*/];
+                    }
+                    return [4 /*yield*/, create_ticket_1["default"](payload.pull_request, payload.repository)];
+                case 1:
+                    status_1 = _a.sent();
+                    core.setOutput('created-ticket', "" + (status_1 === create_ticket_1.Status.Created));
+                    if (status_1 === create_ticket_1.Status.Error) {
+                        core.setFailed('Could not create ticket');
+                    }
+                    _a.label = 2;
+                case 2: return [2 /*return*/];
             }
-            if (payload.action === 'opened') {
-                if (!payload.pull_request.user.login.includes('dependabot')) {
-                    core.debug('Not a dependabot PR');
-                    return [2 /*return*/];
-                }
-                create_ticket_1["default"](payload.pull_request, payload.repository);
-            }
-            return [2 /*return*/];
         });
     });
 }
@@ -10079,13 +10086,23 @@ var github = __importStar(__webpack_require__(469));
 var clubhouse_lib_1 = __importDefault(__webpack_require__(153));
 var client = clubhouse_lib_1["default"].create(process.env.CLUBHOUSE_API_TOKEN);
 var octokit = new github.GitHub(process.env.GITHUB_TOKEN);
+var ticketRegex = /\[ch\d+\]/;
+var Status;
+(function (Status) {
+    Status[Status["Created"] = 0] = "Created";
+    Status[Status["NotCreated"] = 1] = "NotCreated";
+    Status[Status["Error"] = 2] = "Error";
+})(Status = exports.Status || (exports.Status = {}));
 function createTicket(pullRequest, repository) {
     return __awaiter(this, void 0, void 0, function () {
-        var title, html_url, result_1, e_1;
+        var title, html_url, body, result_1, e_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    title = pullRequest.title, html_url = pullRequest.html_url;
+                    title = pullRequest.title, html_url = pullRequest.html_url, body = pullRequest.body;
+                    if (body === null || body === void 0 ? void 0 : body.match(ticketRegex)) {
+                        return [2 /*return*/, Status.NotCreated];
+                    }
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 4, , 5]);
@@ -10110,7 +10127,7 @@ function createTicket(pullRequest, repository) {
                         })];
                 case 3:
                     _a.sent();
-                    return [3 /*break*/, 5];
+                    return [2 /*return*/, Status.Created];
                 case 4:
                     e_1 = _a.sent();
                     if (e_1.response) {
@@ -10120,7 +10137,7 @@ function createTicket(pullRequest, repository) {
                         core.debug(JSON.stringify(e_1.body, null, 2));
                     }
                     core.error(e_1.message);
-                    return [3 /*break*/, 5];
+                    return [2 /*return*/, Status.Error];
                 case 5: return [2 /*return*/];
             }
         });
