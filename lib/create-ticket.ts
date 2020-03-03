@@ -21,7 +21,8 @@ export default async function createTicket(
 ): Promise<Status> {
   const { title, html_url, body } = pullRequest;
 
-  if (body?.match(ticketRegex)) {
+  if (body && ticketRegex.test(body)) {
+    core.debug('Pull request body matches ticket regex already.');
     return Status.NotCreated;
   }
 

@@ -11750,7 +11750,8 @@ function createTicket(pullRequest, repository) {
             switch (_a.label) {
                 case 0:
                     title = pullRequest.title, html_url = pullRequest.html_url, body = pullRequest.body;
-                    if (body === null || body === void 0 ? void 0 : body.match(ticketRegex)) {
+                    if (body && ticketRegex.test(body)) {
+                        core.debug('Pull request body matches ticket regex already.');
                         return [2 /*return*/, Status.NotCreated];
                     }
                     _a.label = 1;
