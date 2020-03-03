@@ -7918,6 +7918,7 @@ function main() {
                     return [4 /*yield*/, create_ticket_1["default"](payload.pull_request, payload.repository)];
                 case 1:
                     status_1 = _a.sent();
+                    core.debug("Creation Status: " + status_1);
                     core.setOutput('created-ticket', "" + (status_1 === create_ticket_1.Status.Created));
                     if (status_1 === create_ticket_1.Status.Error) {
                         core.setFailed('Could not create ticket');
@@ -11739,9 +11740,9 @@ var octokit = new github.GitHub(process.env.GITHUB_TOKEN);
 var ticketRegex = /\[ch\d+\]/;
 var Status;
 (function (Status) {
-    Status[Status["Created"] = 0] = "Created";
-    Status[Status["NotCreated"] = 1] = "NotCreated";
-    Status[Status["Error"] = 2] = "Error";
+    Status["Created"] = "Created";
+    Status["NotCreated"] = "NotCreated";
+    Status["Error"] = "Error";
 })(Status = exports.Status || (exports.Status = {}));
 function createTicket(pullRequest, repository) {
     return __awaiter(this, void 0, void 0, function () {

@@ -10,9 +10,9 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
 const ticketRegex = /\[ch\d+\]/;
 
 export enum Status {
-  Created,
-  NotCreated,
-  Error
+  Created = 'Created',
+  NotCreated = 'NotCreated',
+  Error = 'Error'
 }
 
 export default async function createTicket(

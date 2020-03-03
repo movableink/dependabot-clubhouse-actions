@@ -20,6 +20,8 @@ async function main(): Promise<void> {
 
     const status = await createTicket(payload.pull_request, payload.repository);
 
+    core.debug(`Creation Status: ${status}`);
+
     core.setOutput('created-ticket', `${status === Status.Created}`);
 
     if (status === Status.Error) {
