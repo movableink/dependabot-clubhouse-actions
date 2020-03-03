@@ -1,18 +1,42 @@
 {
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "sourceType": "module"
+  },
   "extends": [
     "@movable/eslint-config",
-    "@movable/eslint-config/node"
+    "@movable/eslint-config/node",
+    "plugin:@typescript-eslint/recommended"
   ],
+  "rules": {
+    "@typescript-eslint/camelcase": "off",
+
+    "node/no-unsupported-features/es-syntax": ["error", {
+      "ignores": ["modules"]
+    }]
+  },
   "overrides": [
     {
-      "files": ["__mocks__/**/*.js", "**/*.spec.js"],
+      "files": ["*.js"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
+    },
+    {
+      "files": ["__mocks__/**/*.*", "**/*.spec.*"],
       "plugins": ["jest"],
       "env": {
         "jest/globals": true
       },
       "rules": {
-        "node/no-unpublished-require": "off"
+        "node/no-unpublished-import": "off"
       }
     }
-  ]
+  ],
+  "settings": {
+    "node": {
+      "tryExtensions": [".js", ".ts", ".json"]
+    }
+  }
 }

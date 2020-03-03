@@ -1,8 +1,8 @@
-const core = require('@actions/core');
-const nock = require('nock');
-const createTicket = require('./create-ticket');
-const SUCCESS_PAYLOAD = require('../fixtures/create-ticket/success.json');
-const SCHEMA_MISMATCH_PAYLOAD = require('../fixtures/create-ticket/schema-mismatch.json');
+import * as core from '@actions/core';
+import nock from 'nock';
+import createTicket from './create-ticket';
+import SUCCESS_PAYLOAD from '../fixtures/create-ticket/success.json';
+import SCHEMA_MISMATCH_PAYLOAD from '../fixtures/create-ticket/schema-mismatch.json';
 
 beforeEach(() => {
   nock.disableNetConnect();
@@ -19,19 +19,19 @@ test('it creates a ClubHouse ticket', async () => {
     .patch('/repos/foo/bar/pulls/123')
     .reply(200, {});
 
-  await createTicket({
-    pull_request: {
+  await createTicket(
+    {
       title: 'Testing',
       html_url: 'https://github.com/foo/bar',
-      number: '123'
+      number: 123
     },
-    repository: {
+    {
       owner: {
         login: 'foo'
       },
       name: 'bar'
     }
-  });
+  );
 
   expect(requestLog).toBeCalled();
 });
@@ -41,19 +41,19 @@ test('it handles a ClubHouse error', async () => {
     .post('/api/v3/stories?token=undefined')
     .reply(400, SCHEMA_MISMATCH_PAYLOAD);
 
-  await createTicket({
-    pull_request: {
+  await createTicket(
+    {
       title: 'Testing',
       html_url: 'https://github.com/foo/bar',
-      number: '123'
+      number: 123
     },
-    repository: {
+    {
       owner: {
         login: 'foo'
       },
       name: 'bar'
     }
-  });
+  );
 
   expect(core.error).toBeCalledWith('Bad Request');
 });

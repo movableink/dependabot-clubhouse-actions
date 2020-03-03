@@ -1,13 +1,16 @@
-'use strict';
+import * as core from '@actions/core';
+import * as github from '@actions/github';
+import Clubhouse from 'clubhouse-lib';
 
-const core = require('@actions/core');
-const github = require('@actions/github');
-const Clubhouse = require('clubhouse-lib');
+import { WebhookPayload, PayloadRepository } from '@actions/github/lib/interfaces';
 
 const client = Clubhouse.create(process.env.CLUBHOUSE_API_TOKEN);
 const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
 
-module.exports = async function createTicket({ pull_request: pullRequest, repository }) {
+export default async function createTicket(
+  pullRequest: WebhookPayload['pull_request'],
+  repository: PayloadRepository
+): Promise<void> {
   const { title, html_url } = pullRequest;
 
   try {
@@ -15,9 +18,9 @@ module.exports = async function createTicket({ pull_request: pullRequest, reposi
       client.createStory({
         name: title,
         description: `See details from Dependabot [here](${html_url}).`,
-        project_id: core.getInput('project-id', { required: true }),
+        project_id: parseInt(core.getInput('project-id', { required: true }), 10),
         story_type: 'chore',
-        workflow_state_id: core.getInput('initial-state-id')
+        workflow_state_id: parseInt(core.getInput('initial-state-id'), 10)
       })
     );
 
@@ -40,4 +43,4 @@ module.exports = async function createTicket({ pull_request: pullRequest, reposi
 
     core.error(e.message);
   }
-};
+}
