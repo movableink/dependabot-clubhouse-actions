@@ -7901,7 +7901,7 @@ var create_ticket_1 = __importStar(__webpack_require__(456));
 var payload = github.context.payload;
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var status_1;
+        var status;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -7910,21 +7910,19 @@ function main() {
                         core.warning('Workflow run outside of a `pull_request` event');
                         return [2 /*return*/];
                     }
-                    if (!(payload.action === 'opened')) return [3 /*break*/, 2];
                     if (!payload.pull_request.user.login.includes('dependabot')) {
                         core.debug('Not a dependabot PR');
                         return [2 /*return*/];
                     }
                     return [4 /*yield*/, create_ticket_1["default"](payload.pull_request, payload.repository)];
                 case 1:
-                    status_1 = _a.sent();
-                    core.debug("Creation Status: " + status_1);
-                    core.setOutput('created-ticket', "" + (status_1 === create_ticket_1.Status.Created));
-                    if (status_1 === create_ticket_1.Status.Error) {
+                    status = _a.sent();
+                    core.debug("Creation Status: " + status);
+                    core.setOutput('created-ticket', "" + (status === create_ticket_1.Status.Created));
+                    if (status === create_ticket_1.Status.Error) {
                         core.setFailed('Could not create ticket');
                     }
-                    _a.label = 2;
-                case 2: return [2 /*return*/];
+                    return [2 /*return*/];
             }
         });
     });

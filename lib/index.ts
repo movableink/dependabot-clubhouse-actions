@@ -12,21 +12,19 @@ async function main(): Promise<void> {
     return;
   }
 
-  if (payload.action === 'opened') {
-    if (!payload.pull_request.user.login.includes('dependabot')) {
-      core.debug('Not a dependabot PR');
-      return;
-    }
+  if (!payload.pull_request.user.login.includes('dependabot')) {
+    core.debug('Not a dependabot PR');
+    return;
+  }
 
-    const status = await createTicket(payload.pull_request, payload.repository);
+  const status = await createTicket(payload.pull_request, payload.repository);
 
-    core.debug(`Creation Status: ${status}`);
+  core.debug(`Creation Status: ${status}`);
 
-    core.setOutput('created-ticket', `${status === Status.Created}`);
+  core.setOutput('created-ticket', `${status === Status.Created}`);
 
-    if (status === Status.Error) {
-      core.setFailed('Could not create ticket');
-    }
+  if (status === Status.Error) {
+    core.setFailed('Could not create ticket');
   }
 }
 
