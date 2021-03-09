@@ -45,5 +45,9 @@
   "lint-staged": {
     "*.{js,ts}": "eslint --fix",
     "*.json": "prettier --write"
+  },
+  "volta": {
+    "node": "12.21.0",
+    "yarn": "1.22.10"
   }
 }
