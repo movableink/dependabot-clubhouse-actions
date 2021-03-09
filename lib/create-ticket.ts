@@ -5,7 +5,7 @@ import Clubhouse from 'clubhouse-lib';
 import { WebhookPayload, PayloadRepository } from '@actions/github/lib/interfaces';
 
 const client = Clubhouse.create(process.env.CLUBHOUSE_API_TOKEN);
-const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
+const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 
 const ticketRegex = /\[ch\d+\]/;
 
