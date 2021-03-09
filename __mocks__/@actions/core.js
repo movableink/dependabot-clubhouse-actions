@@ -10,5 +10,5 @@ module.exports = {
 
   group(_label, callback) {
     return callback();
-  }
+  },
 };
