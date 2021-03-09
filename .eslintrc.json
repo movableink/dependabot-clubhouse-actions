@@ -1,20 +1,19 @@
 {
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "project": "./tsconfig.json",
-    "sourceType": "module"
-  },
+  "root": true,
   "extends": [
     "@movable/eslint-config",
-    "@movable/eslint-config/node",
-    "plugin:@typescript-eslint/recommended"
+    "@movable/eslint-config-typescript",
+    "@movable/eslint-config-node"
   ],
   "rules": {
     "@typescript-eslint/camelcase": "off",
 
-    "node/no-unsupported-features/es-syntax": ["error", {
-      "ignores": ["modules"]
-    }]
+    "node/no-unsupported-features/es-syntax": [
+      "error",
+      {
+        "ignores": ["modules"]
+      }
+    ]
   },
   "overrides": [
     {
