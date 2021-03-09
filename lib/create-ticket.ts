@@ -12,7 +12,7 @@ const ticketRegex = /\[ch\d+\]/;
 export enum Status {
   Created = 'Created',
   NotCreated = 'NotCreated',
-  Error = 'Error'
+  Error = 'Error',
 }
 
 export default async function createTicket(
@@ -33,7 +33,7 @@ export default async function createTicket(
         description: `See details from Dependabot [here](${html_url}).`,
         project_id: parseInt(core.getInput('project-id', { required: true }), 10),
         story_type: 'chore',
-        workflow_state_id: parseInt(core.getInput('initial-state-id'), 10)
+        workflow_state_id: parseInt(core.getInput('initial-state-id'), 10),
       })
     );
 
@@ -42,7 +42,7 @@ export default async function createTicket(
         owner: repository.owner.login,
         repo: repository.name,
         pull_number: pullRequest.number,
-        body: pullRequest.body + `\n\n:house: [ch${result.id}](${result.app_url})`
+        body: pullRequest.body + `\n\n:house: [ch${result.id}](${result.app_url})`,
       })
     );
 

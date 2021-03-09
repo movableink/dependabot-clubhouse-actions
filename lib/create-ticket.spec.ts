@@ -21,13 +21,13 @@ test('it creates a ClubHouse ticket', async () => {
     {
       title: 'Testing',
       html_url: 'https://github.com/foo/bar',
-      number: 123
+      number: 123,
     },
     {
       owner: {
-        login: 'foo'
+        login: 'foo',
       },
-      name: 'bar'
+      name: 'bar',
     }
   );
 
@@ -43,13 +43,13 @@ test('it handles a ClubHouse error', async () => {
     {
       title: 'Testing',
       html_url: 'https://github.com/foo/bar',
-      number: 123
+      number: 123,
     },
     {
       owner: {
-        login: 'foo'
+        login: 'foo',
       },
-      name: 'bar'
+      name: 'bar',
     }
   );
 
@@ -68,13 +68,13 @@ test('it does not create a ticket if one is already attached', async () => {
       title: 'Testing',
       html_url: 'https://github.com/foo/bar',
       number: 123,
-      body: '[ch1234]'
+      body: '[ch1234]',
     },
     {
       owner: {
-        login: 'foo'
+        login: 'foo',
       },
-      name: 'bar'
+      name: 'bar',
     }
   );
 
