@@ -21,7 +21,7 @@
     "@movable/prettier-config": "^0.2.0",
     "@types/jest": "^26.0.20",
     "@typescript-eslint/eslint-plugin": "^2.22.0",
-    "@typescript-eslint/parser": "^2.22.0",
+    "@typescript-eslint/parser": "^2.34.0",
     "@zeit/ncc": "^0.20.5",
     "eslint": "^6.7.2",
     "eslint-plugin-jest": "^23.1.1",
