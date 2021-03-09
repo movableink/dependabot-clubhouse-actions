@@ -26,7 +26,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/checkout@v1
       - uses: volta-cli/action@v1
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -44,6 +43,12 @@ jobs:
       - name: Check if there are changes
         id: git-changes
         uses: UnicornGlobal/has-changes-action@v1.0.11
+      - name: Upload artifact if there are changes
+        if: steps.git-changes.outputs.changed == 1
+        uses: actions/upload-artifact@v2
+        with:
+          name: github-action-script
+          path: dist/index.js
       - name: Fail if there are changes
         if: steps.git-changes.outputs.changed == 1
         run: exit 1
