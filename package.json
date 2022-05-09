@@ -21,7 +21,7 @@
     "@movable/eslint-config-node": "^0.4.3",
     "@movable/eslint-config-typescript": "^0.2.2",
     "@movable/prettier-config": "^0.3.6",
-    "@types/jest": "^26.0.20",
+    "@types/jest": "^27.5.0",
     "@zeit/ncc": "^0.20.5",
     "eslint-plugin-jest": "^24.2.0",
     "husky": "^4.0.1",
