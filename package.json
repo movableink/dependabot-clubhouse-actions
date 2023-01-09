@@ -23,7 +23,7 @@
     "@movable/prettier-config": "^0.3.6",
     "@types/jest": "^26.0.20",
     "@zeit/ncc": "^0.20.5",
-    "eslint-plugin-jest": "^24.2.0",
+    "eslint-plugin-jest": "^27.2.1",
     "husky": "^4.0.1",
     "jest": "^26.6.3",
     "lint-staged": "^10.0.0-beta.14",
